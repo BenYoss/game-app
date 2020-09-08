@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Navbar,
+  Button,
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,7 @@ const { getThreadsByChannel } = require('../../helpers/helpers.js');
 const Thread = ({ channel }) => {
   const { idChannel } = channel;
   const [threads, setThreads] = useState([]);
+  const [idThread, setIdThread] = useState([]);
   useEffect(() => {
     getThreadsByChannel(idChannel)
       .then((result) => {
@@ -17,6 +18,16 @@ const Thread = ({ channel }) => {
       })
       .catch((err) => console.error('ERROR GETTING THREADS: ', err));
   }, []);
+
+  // useEffect((id) => {
+  //   setIdThread(id);
+  // }, []);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIdThread(e.target.id);
+  };
+
   return (
     <div>
       {threads.map((thread) => (
@@ -31,13 +42,14 @@ const Thread = ({ channel }) => {
                 <span style={{ marginRight: '20px' }}>{thread.createdAt.split('T')[0]}</span>
               </div>
             </div>
-            <Navbar.Brand href="/replies">
-              <h4 style={{ display: 'inline-block', marginLeft: '20px' }}>{thread.text}</h4>
-            </Navbar.Brand>
+            <Button href="/replies" id={`${thread.idThread}`} onClick={(e) => { handleClick(e); }} variant="primary" size="lg">
+              <h4 style={{ display: 'inline-block', marginLeft: '20px' }} id={thread.idThread}>{thread.text}</h4>
+            </Button>
           </div>
         </div>
       ))}
     </div>
+
   );
 };
 
@@ -47,5 +59,4 @@ Thread.propTypes = {
     idChannel: PropTypes.number,
   }).isRequired,
 };
-
 export default Thread;

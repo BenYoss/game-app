@@ -70,7 +70,8 @@ dbRouter.get('/threads', (req, res) => {
 // retrieves a single thread and its replies from the db by id ("idThread")
 dbRouter.get('/replies', (req, res) => {
   // deconstruct "idChannel" number from req.body to pass to get threads form db
-  const { idThread } = req.query;
+  const { idThread } = req.body;
+  console.log(idThread);
   // if (authChecker(req.user)) {
   getReplies(idThread)
     .then((thread) => {
